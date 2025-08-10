@@ -1,20 +1,17 @@
-# Use an official Node.js LTS image
-FROM node:18-alpine
+# Use the official n8n Docker image
+FROM n8nio/n8n:latest
 
-# Set working directory inside the container
-WORKDIR /app
+# Set timezone (optional)
+ENV GENERIC_TIMEZONE=Asia/Kolkata
 
-# Copy only package files first (for faster caching)
-COPY package*.json ./
+# Set the host to match Render deployment
+ENV N8N_HOST=n8nworkflowzaarz.onrender.com
+ENV N8N_PORT=5678
+ENV N8N_PROTOCOL=https
+ENV WEBHOOK_URL=https://n8nworkflowzaarz.onrender.com/
 
-# Install dependencies
-RUN npm install --production
+# Expose n8n port
+EXPOSE 5678
 
-# Copy the rest of the application files
-COPY . .
-
-# Expose the port your app runs on (default: 3000)
-EXPOSE 3000
-
-# Start the application
-CMD ["npm", "start"]
+# Start n8n
+CMD ["n8n", "start"]
